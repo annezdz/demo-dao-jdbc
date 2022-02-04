@@ -1,0 +1,4 @@
+Pessoal pros nossos objetos poderem ser transformados em sequência de bytes na linguagem Java.
+A gente tem que fazer bo implement serializable se a gente quiser que o nosso
+objeto seja gravado em arquivo seja trafegados em rede e assim
+por diante.
