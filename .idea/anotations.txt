@@ -2,3 +2,4 @@ Pessoal pros nossos objetos poderem ser transformados em sequência de bytes na 
 A gente tem que fazer bo implement serializable se a gente quiser que o nosso
 objeto seja gravado em arquivo seja trafegados em rede e assim
 por diante.
+O model compreende não só as entidades mas também as classes que fazem transformações dessas entidades
