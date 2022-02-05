@@ -6,6 +6,7 @@ import model.entities.Department;
 import model.entities.Seller;
 
 import java.util.Date;
+import java.util.List;
 
 public class Program {
     public static void main(String[] args) {
@@ -22,6 +23,15 @@ public class Program {
 
       //  System.out.println(department);
         System.out.println(sellerFindById);
+
+        System.out.println("=== TEST 2 : seller findByDepartment ===");
+
+        Department department1 = new Department(2,null);
+        List<Seller> list = sellerDao.findByDepartment(department1);
+        for(Seller obr : list) {
+            System.out.println(obr);
+        }
+
 
 
     }
