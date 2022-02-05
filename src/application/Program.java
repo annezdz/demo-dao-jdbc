@@ -7,8 +7,12 @@ import model.entities.Seller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 public class Program {
+
+    public static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
 
         Department department = new Department(1,"books");
@@ -47,6 +51,20 @@ public class Program {
         sellerDao.insert(newSeller);
         System.out.println("Inserted! New id " + newSeller.getId());
 
+        System.out.println();
+        System.out.println("=== TEST 5 : seller insert  ===");
+         newSeller = sellerDao.findById(1);
+         newSeller.setName("Eduardo Dudu");
+         sellerDao.update(newSeller);
+        System.out.println("Updtate completed");
+
+        System.out.println();
+        System.out.println("=== TEST 6 : seller update  ===");
+        System.out.println("Enter id for delete test = ");
+        int id = scanner.nextInt();
+        sellerDao.deleteById(id);
+        System.out.println(id + " deleted successfully");
+        scanner.close();
 
     }
 }
