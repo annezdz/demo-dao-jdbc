@@ -26,4 +26,10 @@ public class DaoUtils {
         dep.setName(rs.getString("DepName"));
         return dep;
     }
+
+    protected static Department instantiateDepartmentEntity(ResultSet rs) throws SQLException {
+        dep.setId(rs.getInt("Id"));
+        dep.setName(rs.getString("Name"));
+        return dep;
+    }
 }
