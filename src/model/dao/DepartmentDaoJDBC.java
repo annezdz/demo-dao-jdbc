@@ -21,7 +21,6 @@ public class DepartmentDaoJDBC implements DepartmentDao{
         this.conn = conn;
     }
 
-
     @Override
     public void insert(Department department) {
         try {
@@ -56,12 +55,37 @@ public class DepartmentDaoJDBC implements DepartmentDao{
 
     @Override
     public void update(Department obj) {
+        try {
+            st = conn.prepareStatement(
+                    "UPDATE department "
+                            + "SET Name = ? "
+                            + "WHERE Id = ? ");
+            st.setString(1,obj.getName());
+            st.setInt(2, obj.getId());
 
+            st.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
     public void deleteById(Integer id) {
-
+        try {
+            st = conn.prepareStatement("DELETE FROM department WHERE Id = ? ");
+            st.setInt(1,id);
+            int rows = st.executeUpdate();
+            if(rows == 0) {
+                throw new DbException("Id not existent!");
+            }
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
     }
 
     @Override
@@ -113,30 +137,4 @@ public class DepartmentDaoJDBC implements DepartmentDao{
         }
     }
 }
-//  try {
-//          st = conn.prepareStatement(
-//          "SELECT seller.*,department.Name as DepName "
-//          + "FROM seller INNER JOIN department "
-//          + "ON seller.DepartmentId = department.Id "
-//          + "ORDER BY Name");
-//          rs = st.executeQuery();
-//          List<Seller> list = new ArrayList<>();
-//        Map<Integer, Department> map = new HashMap<>();
-//        while(rs.next()) {
-//        Department dep = map.get(rs.getInt("DepartmentId"));
-//        if(dep == null) {
-//        dep = DaoUtils.instantiateDepartment(rs);
-//        map.put(rs.getInt("DepartmentId"),dep);
-//        }
-//        Seller obj = DaoUtils.instantiateSeller(rs,dep);
-//        list.add(obj);
-//        }
-//        return list;
-//        }
-//        catch (SQLException e) {
-//        throw new DbException(e.getMessage());
-//        }
-//        finally {
-//        DB.closeStatement(st);
-//        DB.closeResultSet(rs);
-//        }
+

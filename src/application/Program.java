@@ -52,14 +52,14 @@ public class Program {
         System.out.println("Inserted! New id " + newSeller.getId());
 
         System.out.println();
-        System.out.println("=== TEST 5 : seller insert  ===");
-         newSeller = sellerDao.findById(1);
-         newSeller.setName("Eduardo Dudu");
-         sellerDao.update(newSeller);
+        System.out.println("=== TEST 5 : seller update  ===");
+        newSeller = sellerDao.findById(1);
+        newSeller.setName("Eduardo Dudu");
+        sellerDao.update(newSeller);
         System.out.println("Updtate completed");
 
         System.out.println();
-        System.out.println("=== TEST 6 : seller update  ===");
+        System.out.println("=== TEST 6 : seller delete  ===");
         System.out.println("Enter id for delete test = ");
         int id = scanner.nextInt();
         sellerDao.deleteById(id);
