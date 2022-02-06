@@ -5,6 +5,7 @@ import model.entities.Seller;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class DaoUtils {
 
@@ -33,3 +34,4 @@ public class DaoUtils {
         return dep;
     }
 }
+

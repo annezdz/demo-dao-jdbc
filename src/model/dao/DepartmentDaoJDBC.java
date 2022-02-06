@@ -5,10 +5,8 @@ import db.DbException;
 import model.entities.Department;
 import model.entities.Seller;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,8 +23,35 @@ public class DepartmentDaoJDBC implements DepartmentDao{
 
 
     @Override
-    public void insert(Department obj) {
+    public void insert(Department department) {
+        try {
+            st = conn.prepareStatement(
+                    "INSERT INTO department "
+                            + "(Name) "
+                            + "VALUES "
+                            + "(?)", Statement.RETURN_GENERATED_KEYS);
+            st.setString(1,department.getName());
 
+            int rowsAffected = st.executeUpdate();
+
+            if(rowsAffected > 0) {
+                ResultSet rs = st.getGeneratedKeys();
+                if(rs.next()) {
+                    int id = rs.getInt(1);
+                    department.setId(id);
+                }
+                DB.closeResultSet(rs);
+            }
+            else {
+                throw new DbException("Unexpected error! No rows affected!");
+            }
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
@@ -48,8 +73,7 @@ public class DepartmentDaoJDBC implements DepartmentDao{
             st.setInt(1,id);
             rs = st.executeQuery();
             if(rs.next()) {
-                Department dep = new Department();
-                dep = DaoUtils.instantiateDepartmentEntity(rs);
+                Department dep = DaoUtils.instantiateDepartmentEntity(rs);
                 return dep;
             }
             return null;
@@ -65,6 +89,54 @@ public class DepartmentDaoJDBC implements DepartmentDao{
 
     @Override
     public List<Department> findAll() {
-        return null;
+        try {
+            st = conn.prepareStatement(
+                    "SELECT * FROM department ORDER BY Id");
+            rs = st.executeQuery();
+
+            List<Department> list = new ArrayList<>();
+
+            while(rs.next()) {
+                Department dep = new Department();
+                dep.setId(rs.getInt("Id"));
+                dep.setName(rs.getString("Name"));
+                list.add(dep);
+            }
+            return list;
+        }
+        catch (SQLException ex) {
+            throw new DbException(ex.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
     }
 }
+//  try {
+//          st = conn.prepareStatement(
+//          "SELECT seller.*,department.Name as DepName "
+//          + "FROM seller INNER JOIN department "
+//          + "ON seller.DepartmentId = department.Id "
+//          + "ORDER BY Name");
+//          rs = st.executeQuery();
+//          List<Seller> list = new ArrayList<>();
+//        Map<Integer, Department> map = new HashMap<>();
+//        while(rs.next()) {
+//        Department dep = map.get(rs.getInt("DepartmentId"));
+//        if(dep == null) {
+//        dep = DaoUtils.instantiateDepartment(rs);
+//        map.put(rs.getInt("DepartmentId"),dep);
+//        }
+//        Seller obj = DaoUtils.instantiateSeller(rs,dep);
+//        list.add(obj);
+//        }
+//        return list;
+//        }
+//        catch (SQLException e) {
+//        throw new DbException(e.getMessage());
+//        }
+//        finally {
+//        DB.closeStatement(st);
+//        DB.closeResultSet(rs);
+//        }
